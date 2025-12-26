@@ -42,3 +42,10 @@ jobs:
         colcon test --packages-select mypkg
         colcon test-result --verbose
 
+    - name: Show test logs on failure
+      if: failure()
+      run: |
+        cd ros2_ws
+        echo "===== TEST LOGS ====="
+        find log -type f -name "*.log" -exec echo "----- {} -----" \; -exec cat {} \;
+
