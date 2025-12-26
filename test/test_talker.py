@@ -1,14 +1,14 @@
+# test_talker.py の先頭
 import sys
-import pytest
 from unittest.mock import MagicMock
 
-# person_msgs がなくてもエラーにならないようにモック
+# person_msgs がなくても import エラーにならないようにモック
 sys.modules['person_msgs'] = MagicMock()
 sys.modules['person_msgs.srv'] = MagicMock()
 sys.modules['person_msgs.srv'].Query = MagicMock()
-from person_msgs.srv import Query
 
-# talker.py の main 関数やサービス登録関数を直接 import
+import pytest
+import rclpy
 from mypkg.talker import main as talker_main
 
 @pytest.fixture
