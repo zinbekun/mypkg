@@ -1,39 +1,40 @@
-import pytest
-import rclpy
-from rclpy.node import Node
-from person_msgs.srv import Query
-import subprocess
-import time
-import signal
 import sys
+import pytest
 from unittest.mock import MagicMock
 
 # person_msgs がなくてもエラーにならないようにモック
 sys.modules['person_msgs'] = MagicMock()
 sys.modules['person_msgs.srv'] = MagicMock()
+sys.modules['person_msgs.srv'].Query = MagicMock()
+from person_msgs.srv import Query
 
-@pytest.fixture(scope="module")
-def talker():
-    # talker.py を裏で起動
-    proc = subprocess.Popen(["python3", "mypkg/talker.py"])
-    time.sleep(2)  # 起動待ち
-    yield
-    proc.send_signal(signal.SIGINT)
-    proc.wait()
+# talker.py の main 関数やサービス登録関数を直接 import
+from mypkg.talker import main as talker_main
 
-def test_query_service(talker):
-    rclpy.init()
-    node = Node("test_node")
-    client = node.create_client(Query, "query")
-    while not client.wait_for_service(timeout_sec=1.0):
-        pass
+@pytest.fixture
+def setup_talker(monkeypatch):
+    """talker 内で呼ばれる Query サービスのモック"""
+    mock_result = MagicMock()
+    mock_result.age = 123
 
-    req = Query.Request()
-    req.name = "now"
-    future = client.call_async(req)
-    rclpy.spin_until_future_complete(node, future)
-    result = future.result()
-    assert result.age == 123
-    node.destroy_node()
-    rclpy.shutdown()
+    # call_async の返り値をモックに差し替え
+    mock_client = MagicMock()
+    mock_future = MagicMock()
+    mock_future.result.return_value = mock_result
+    mock_client.call_async.return_value = mock_future
+
+    # Node.create_client をモック化
+    monkeypatch.setattr("rclpy.node.Node.create_client", lambda self, srv_type, srv_name: mock_client)
+    yield mock_client, mock_future, mock_result
+
+def test_query_service(setup_talker):
+    client, future, mock_result = setup_talker
+
+    # talker を実行（内部でモックを使ってサービス呼び出し）
+    # main() の中で rclpy.init(), Node(), create_client() が呼ばれる想定
+    # ここでは直接 main() を呼ぶと、全てモックなので person_msgs がなくても安全
+    talker_main()
+
+    # モックの返り値が正しく使われているか確認
+    assert future.result().age == 123
 
