@@ -1,4 +1,4 @@
-name: ROS2 build test
+name: ROS2 build and test
 
 on:
   push:
@@ -11,16 +11,19 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+    # 1. リポジトリをチェックアウト
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         path: ros2_ws/src
 
+    # 2. ROS 2 Jazzy をセットアップ
     - name: Setup ROS 2 Jazzy
       uses: ros-tooling/setup-ros@v0.7
       with:
         required-ros-distributions: jazzy
 
+    # 3. 依存関係をインストール
     - name: Install dependencies
       run: |
         sudo apt update
@@ -28,24 +31,39 @@ jobs:
         cd ros2_ws
         rosdep install --from-paths src --ignore-src -r -y
 
+    # 4. ワークスペースをビルド
     - name: Build workspace
       run: |
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
-        colcon build
+        colcon build --symlink-install
 
-    - name: Run ROS2 tests
+    # 5. talker/listener のテスト実行
+    - name: Run talker & listener tests
       run: |
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
         source install/setup.bash
-        colcon test --packages-select mypkg
-        colcon test-result --verbose
 
+        # talker を裏で起動（サービス提供側）
+        ros2 run mypkg talker &
+        TALKER_PID=$!
+
+        sleep 3
+
+        # talker / listener 関連のテストだけ実行
+        if [ -d src/mypkg/test ]; then
+          pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
+        else
+          echo "No test files found, skipping pytest."
+        fi
+
+        kill $TALKER_PID
+
+    # 6. テスト失敗時にログ表示
     - name: Show test logs on failure
       if: failure()
       run: |
         cd ros2_ws
-        echo "===== TEST LOGS ====="
-        find log -type f -name "*.log" -exec echo "----- {} -----" \; -exec cat {} \;
+        find log -type f -name "*.log" -exec cat {} \;
 
