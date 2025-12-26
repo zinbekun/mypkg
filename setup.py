@@ -18,7 +18,7 @@ setup(
     zip_safe=True,
     maintainer='nbalu',
     maintainer_email='abannofabiao@gmail.com',
-    description='ロボットシステム学のやつ',
+    description='ロボットシステム学課題',
     license='BSD-3-Clause',
     extras_require={
         'test': [

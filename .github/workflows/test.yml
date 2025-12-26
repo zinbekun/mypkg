@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-24.04
 
     steps:
@@ -33,4 +33,27 @@ jobs:
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
         colcon build --event-handlers console_direct+
+
+    - name: Run talker & listener test
+      run: |
+        source /opt/ros/jazzy/setup.bash
+        cd ros2_ws
+        source install/setup.bash
+
+        ros2 run mypkg talker &
+        TALKER_PID=$!
+
+        ros2 run mypkg listener &
+        LISTENER_PID=$!
+
+        sleep 3
+
+        if [ -d src/mypkg/test ]; then
+          pytest src/mypkg/test
+        else
+          echo "No pytest directory found, skipping pytest."
+        fi
+
+        kill $TALKER_PID
+        kill $LISTENER_PID
 
