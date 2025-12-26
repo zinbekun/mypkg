@@ -17,13 +17,13 @@ jobs:
       with:
         path: ros2_ws/src
 
-    # 2. ROS 2 Jazzy をセットアップ
+    # 2. ROS2 Jazzy をセットアップ
     - name: Setup ROS 2 Jazzy
       uses: ros-tooling/setup-ros@v0.7
       with:
         required-ros-distributions: jazzy
 
-    # 3. 依存関係をインストール
+    # 3. 依存パッケージをインストール
     - name: Install dependencies
       run: |
         sudo apt update
@@ -36,32 +36,19 @@ jobs:
       run: |
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
-        colcon build --symlink-install
+        colcon build
 
     # 5. talker/listener のテスト実行
-    - name: Run talker & listener tests
+    - name: Run tests
       run: |
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
         source install/setup.bash
 
-        # talker を裏で起動（サービス提供側）
-        ros2 run mypkg talker &
-        TALKER_PID=$!
+        # pytest を使って talker/listener 関連のテストだけ実行
+        pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
 
-        sleep 3
-
-        # talker / listener 関連テストだけ実行
-        if [ -d src/mypkg/test ]; then
-          pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
-        else
-          echo "No test files found, skipping pytest."
-        fi
-
-        # talker プロセスを停止
-        kill $TALKER_PID
-
-    # 6. テスト失敗時にログ表示
+    # 6. テスト失敗時にログを表示
     - name: Show test logs on failure
       if: failure()
       run: |
