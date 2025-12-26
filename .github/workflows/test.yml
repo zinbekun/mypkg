@@ -51,13 +51,14 @@ jobs:
 
         sleep 3
 
-        # talker / listener 関連のテストだけ実行
+        # talker / listener 関連テストだけ実行
         if [ -d src/mypkg/test ]; then
           pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
         else
           echo "No test files found, skipping pytest."
         fi
 
+        # talker プロセスを停止
         kill $TALKER_PID
 
     # 6. テスト失敗時にログ表示
