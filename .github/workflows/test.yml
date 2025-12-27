@@ -24,19 +24,17 @@ jobs:
       run: |
         sudo apt update
         rosdep update
-        cd ros2_ws
+        # src 配下の依存パッケージをインストール
         rosdep install --from-paths src --ignore-src -r -y
 
     - name: Build workspace
       run: |
         source /opt/ros/jazzy/setup.bash
-        cd ros2_ws
         colcon build
 
     - name: Run tests with person_msgs mocked
       run: |
         source /opt/ros/jazzy/setup.bash
-        cd ros2_ws
         source install/setup.bash
 
         # デバッグ: test ディレクトリを確認
@@ -48,6 +46,5 @@ jobs:
     - name: Show test logs on failure
       if: failure()
       run: |
-        cd ros2_ws
         find log -type f -name "*.log" -exec cat {} \;
 
