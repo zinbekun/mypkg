@@ -47,10 +47,10 @@ jobs:
         source install/setup.bash
 
         # デバッグ: test ディレクトリを確認
-        ls -R src/mypkg/test
+        ls -R ros2_ws/src/mypkg/test
 
         # pytest 実行
-        pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
+        pytest ros2_ws/src/mypkg/test/test_talker.py ros2_ws/src/mypkg/test/test_listener.py
 
     # 6️⃣ テスト失敗時にログを表示
     - name: Show test logs on failure
