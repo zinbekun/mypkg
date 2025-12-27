@@ -11,19 +11,21 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+    # 1. リポジトリをチェックアウト（path 指定なし）
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # 2. ROS 2 Jazzy をセットアップ
     - name: Setup ROS 2 Jazzy
       uses: ros-tooling/setup-ros@v0.7
       with:
         required-ros-distributions: jazzy
 
+    # 3. 必要な依存パッケージをインストール
     - name: Install dependencies
       run: |
         sudo apt update
         rosdep update
-        # ROS 2 ワークスペースの依存パッケージをインストール
         if [ -d "ros2_ws/src" ]; then
           rosdep install --from-paths ros2_ws/src --ignore-src -r -y
         else
@@ -31,36 +33,21 @@ jobs:
           exit 1
         fi
 
+    # 4. ROS 2 ワークスペースをビルド
     - name: Build workspace
       run: |
-        # ROS 2 環境をロード
         source /opt/ros/jazzy/setup.bash
+        cd ros2_ws
+        colcon build
 
-        # ビルド
-        if [ -d "ros2_ws" ]; then
-          cd ros2_ws
-          colcon build
-        else
-          echo "Error: ros2_ws does not exist"
-          exit 1
-        fi
-
+    # 5. pytest でテスト実行（person_msgs は conftest.py でモック）
     - name: Run tests with person_msgs mocked
       run: |
-        # ROS 2 環境をロード
         source /opt/ros/jazzy/setup.bash
-
-        if [ -d "ros2_ws" ]; then
-          cd ros2_ws
-        else
-          echo "Error: ros2_ws does not exist"
-          exit 1
-        fi
-
-        # ビルド後の setup.bash をロード
+        cd ros2_ws
         source install/setup.bash
 
-        # デバッグ: test ディレクトリの存在確認
+        # デバッグ: test ディレクトリ確認
         if [ -d "src/mypkg/test" ]; then
             echo "Test directory exists:"
             ls -R src/mypkg/test
@@ -69,14 +56,13 @@ jobs:
             exit 1
         fi
 
-        # pytest 実行
+        # pytest 実行（カレントディレクトリからの相対パス指定）
         pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
 
+    # 6. テスト失敗時にログを表示
     - name: Show test logs on failure
       if: failure()
       run: |
-        if [ -d "ros2_ws" ]; then
-          cd ros2_ws
-          find log -type f -name "*.log" -exec cat {} \;
-        fi
+        cd ros2_ws
+        find log -type f -name "*.log" -exec cat {} \;
 
