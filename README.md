@@ -15,25 +15,45 @@
 ROS 2 のサービス通信を用いた以下の 2 つのノードが含まれています。
 
 ・talker　ノード：サービスサーバー
+
 ・listenerノード：サービスクライアント
 
 person_msgs/srv/Query サービスを用いて、
 クライアントから送られた要求に対し、現在時刻を返します。
 
+ノード名：talker
+
+役割：
+サービス要求を受信し、内容に応じた応答を返す
+
+使用するサービス：person_msgs/srv/Query
+
+サービス名：query
+
+動作内容
+
+サービス要求の request.time を確認する
+
+request.time == "now" の場合
+→ 現在の日時を文字列で取得し、レスポンスに格納する
+
+それ以外の場合
+→ "unknown" を返す
 
 ## talker.py ・listener.py 使い方
 talker.pyを起動後、別の端末でlistener.pyを起動すると入力した瞬間の時間が表示されます。また、先にlistener.pyを起動すると別端末でtalkr.pyを起動するまで待機中と表示されます。
 
 
 ```shell
-$ ros2 run mypkg listener
-[INFO] [1766842493.607655669] [listener]: 待機中
-
 $ ros2 run mypkg talker
 
 
-$ ros2 run mypkg listener
-[INFO] [1766842150.095770751] [listener]: now:2025-12-27 22:29:10
+$ ros2 service call /query person_msgs/srv/Query "time: now"
+waiting for service to become available...
+requester: making request: person_msgs.srv.Query_Request(time='now')
+
+response:
+person_msgs.srv.Query_Response(now='2025-12-27 22:58:42')
 ```
 
 ## ライセンス
