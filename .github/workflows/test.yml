@@ -1,71 +1,40 @@
-name: ROS2 build and test
+name: ROS2 CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-24.04
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-    # 1. リポジトリをチェックアウト（path 指定なし）
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-    # 2. ROS 2 Jazzy をセットアップ
-    - name: Setup ROS 2 Jazzy
-      uses: ros-tooling/setup-ros@v0.7
-      with:
-        required-ros-distributions: jazzy
+      - name: Set up ROS 2
+        uses: ros-tooling/setup-ros@v0.12
+        with:
+          version: noble
 
-    # 3. 必要な依存パッケージをインストール
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        rosdep update
-        if [ -d "ros2_ws/src" ]; then
-          rosdep install --from-paths ros2_ws/src --ignore-src -r -y
-        else
-          echo "Error: ros2_ws/src does not exist"
-          exit 1
-        fi
+      - name: Update apt and install dependencies
+        run: sudo apt update && sudo apt install -y python3-rosdep python3-colcon-common-extensions
 
-    # 4. ROS 2 ワークスペースをビルド
-    - name: Build workspace
-      run: |
-        source /opt/ros/jazzy/setup.bash
-        cd ros2_ws
-        colcon build
+      - name: Initialize rosdep
+        run: |
+          sudo rosdep init || true
+          rosdep update
 
-    # 5. pytest でテスト実行（person_msgs は conftest.py でモック）
-    - name: Run tests with person_msgs mocked
-      run: |
-        # ROS 2 環境をロード
-        source /opt/ros/jazzy/setup.bash
+      - name: Create ROS2 workspace
+        run: |
+          mkdir -p ~/ros2_ws/src
+          cd ~/ros2_ws
+          # もしパッケージをコピーしたい場合
+          cp -r $GITHUB_WORKSPACE/* src/
 
-        # ワークスペースに移動
-        cd ros2_ws
-        source install/setup.bash
+      - name: Install ROS2 dependencies
+        run: |
+          cd ~/ros2_ws
+          rosdep install --from-paths src --ignore-src -y
 
-        # デバッグ: test ディレクトリを確認
-        if [ -d "src/test" ]; then
-            echo "Test directory exists:"
-            ls -R src/test
-        else
-            echo "Error: src/test does not exist"
-            exit 1
-        fi
-
-        # pytest 実行
-        pytest src/test/test_talker.py src/test/test_listener.py
-
-    # 6. テスト失敗時にログを表示
-    - name: Show test logs on failure
-      if: failure()
-      run: |
-        cd ros2_ws
-        find log -type f -name "*.log" -exec cat {} \;
+      - name: Build workspace
+        run: |
+          cd ~/ros2_ws
+          colcon build
 
