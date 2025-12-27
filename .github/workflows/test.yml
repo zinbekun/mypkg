@@ -39,16 +39,11 @@ jobs:
     #  talker を起動せず、モックで関数単位テスト
     - name: Run tests with person_msgs mocked
       run: |
-        # ROS 2 環境をロード
         source /opt/ros/jazzy/setup.bash
-
-        # ワークスペースルートに移動
         cd ros2_ws
-
-        # ビルド後の setup.bash をロード
         source install/setup.bash
 
-        # デバッグ: test ディレクトリを確認
+        # test ディレクトリ確認
         if [ -d "src/mypkg/test" ]; then
             echo "Test directory exists:"
             ls -R src/mypkg/test
