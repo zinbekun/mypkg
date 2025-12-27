@@ -11,19 +11,19 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    # 1️⃣ リポジトリをワークスペース src 配下にチェックアウト
+    #  リポジトリをワークスペース src 配下にチェックアウト
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         path: ros2_ws/src
 
-    # 2️⃣ ROS 2 Jazzy をセットアップ
+    #  ROS 2 Jazzy をセットアップ
     - name: Setup ROS 2 Jazzy
       uses: ros-tooling/setup-ros@v0.7
       with:
         required-ros-distributions: jazzy
 
-    # 3️⃣ 依存関係をインストール
+    #  依存関係をインストール
     - name: Install dependencies
       run: |
         sudo apt update
@@ -32,27 +32,35 @@ jobs:
         cd ros2_ws
         rosdep install --from-paths src --ignore-src -r -y
 
-    # 4️⃣ ワークスペースをビルド
+    #  ワークスペースをビルド
     - name: Build workspace
       run: |
         source /opt/ros/jazzy/setup.bash
         cd ros2_ws
         colcon build
 
-    # 5️⃣ talker を起動せず、モックで関数単位テスト
+    #  talker を起動せず、モックで関数単位テスト
     - name: Run tests with person_msgs mocked
       run: |
         source /opt/ros/jazzy/setup.bash
+
         cd ros2_ws
         source install/setup.bash
 
         # デバッグ: test ディレクトリを確認
-        ls -R ros2_ws/src/mypkg/test
+        if [ -d "src/mypkg/test" ]; then
+            echo "Test directory exists:"
+            ls -R src/mypkg/test
+        else
+            echo "Error: src/mypkg/test does not exist"
+            exit 1
+        fi
 
         # pytest 実行
-        pytest ros2_ws/src/mypkg/test/test_talker.py ros2_ws/src/mypkg/test/test_listener.py
+        pytest src/mypkg/test/test_talker.py src/mypkg/test/test_listener.py
 
-    # 6️⃣ テスト失敗時にログを表示
+
+    #  テスト失敗時にログを表示
     - name: Show test logs on failure
       if: failure()
       run: |
