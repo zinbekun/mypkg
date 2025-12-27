@@ -56,7 +56,7 @@ person_msgs/srv/Query サービスを用いて、
 
 
 ## talker.py ・listener.py 使い方
-talker.pyを起動後、別の端末でlistener.pyを起動すると入力した瞬間の時間が表示されます。また、先にlistener.pyを起動すると別端末でtalkr.pyを起動するまで待機中と表示されます。
+talker.pyを起動後、別の端末で"now"と入力し、サービスを呼び出すと入力した瞬間の時間が表示されます。また、now以外を入力しサービスを呼び出すと、"unknown"と表示されます。
 
 
 ```shell
@@ -68,7 +68,16 @@ waiting for service to become available...
 requester: making request: person_msgs.srv.Query_Request(time='now')
 
 response:
-person_msgs.srv.Query_Response(now='2025-12-27 22:58:42')
+person_msgs.srv.Query_Response(now='2025-12-27 23:33:35')
+
+$ ros2 service call /query person_msgs/srv/Query "time: y"
+waiting for service to become available...
+requester: making request: person_msgs.srv.Query_Request(time='y')
+
+response:
+person_msgs.srv.Query_Response(now='unknown')
+
+
 ```
 
 ## ライセンス
