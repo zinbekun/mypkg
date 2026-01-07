@@ -1,16 +1,16 @@
-# mypkge
+# mypkg
 千葉工業大学 未来ロボティクス学科 2025年度 ロボットシステム学内で行った内容に、課題で作成したファイルを追加したものです。
 
-[![Test](https://github.com/zinbekun/mypkge/actions/workflows/test.yml/badge.svg)](https://github.com/zinbekun/mypkge/actions/workflows/test.yml)
+[![Test](https://github.com/zinbekun/mypkg/actions/workflows/test.yml/badge.svg)](https://github.com/zinbekun/mypkg/actions/workflows/test.yml)
 
-[README](https://github.com/zinbekun/mypkge/blob/main/README.md?plain=1#L2)は[akajaika](https://github.com/akajaika/robosys2024/blob/main/README.md?plain=1)（© 2024 Kai Nonaka）を参考に作られています。
+[README](https://github.com/zinbekun/mypkg/blob/main/README.md?plain=1#L2)は[akajaika](https://github.com/akajaika/robosys2024/blob/main/README.md?plain=1)（© 2024 Kai Nonaka）を参考に作られています。
 
 ## テスト済みの環境
 ・Ubuntu 24.04.5 LTS
 
 ・Python: 3.12
 
-## mypkge 機能説明
+## mypkg 機能説明
 本パッケージはROS2のサービス通信を用いて、現在時刻を返すだけのシンプルなサーバーノードを提供するパッケージです。
 
 ## talker.pyノード
