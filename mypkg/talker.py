@@ -1,36 +1,33 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2025 Zinbekun
 # SPDX-License-Identifier: BSD-3-Clause
-import sys
+
 import rclpy
 from rclpy.node import Node
 from datetime import datetime
+from person_msgs.srv import Query
 
-# person_msgs が無くても動くようにモック
-try:
-    from person_msgs.srv import Query
-except ModuleNotFoundError:
-    from unittest.mock import MagicMock
-    Query = MagicMock()
 
-rclpy.init()
-node = Node("talker")
+class Talker(Node):
+    def __init__(self):
+        super().__init__("talker")
+        self.srv = self.create_service(Query, "query", self.cb)
 
-def cb(request, response):
-    # モックでも安全に属性チェック
-    req_time = getattr(request, 'time', None)
-    if req_time == "now":
-        # 実際の属性があれば now に書き込み
-        if hasattr(response, 'now'):
+    def cb(self, request, response):
+        if request.time == "now":
             response.now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    else:
-        response.now = "unknown"
+        else:
+            response.now = "unknown"
+        return response
 
-    return response
 
 def main():
-    srv = node.create_service(Query, "query", cb)
+    rclpy.init()
+    node = Talker()
     rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
 
 if __name__ == "__main__":
     main()
