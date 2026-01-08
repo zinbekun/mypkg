@@ -5,21 +5,18 @@
 import rclpy
 from rclpy.node import Node
 from datetime import datetime
-from person_msgs.srv import Query
-
+from example_interfaces.srv import Trigger
 
 class Talker(Node):
     def __init__(self):
-        super().__init__("talker")
-        self.srv = self.create_service(Query, "query", self.cb)
+        super().__init__('talker')
+        self.create_service(Trigger, 'query', self.cb)
+        self.get_logger().info('service /query ready')
 
     def cb(self, request, response):
-        if request.time == "now":
-            response.now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        else:
-            response.now = "unknown"
+        response.success = True
+        response.message = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return response
-
 
 def main():
     rclpy.init()
@@ -27,7 +24,6 @@ def main():
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()
