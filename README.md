@@ -31,35 +31,23 @@
 このサービスは、クライアントから送信されたリクエストを受け取り、ノード内部で処理を行った結果をレスポンスとして返すサービスです。
 
 ## talker.py ・listener.py 使い方
-talker.pyを起動後、別の端末で"now"と入力し、サービスを呼び出すと入力した瞬間の時間が表示されます。しかし、now以外を入力しサービスを呼び出すと、"unknown"と表示されます。また、launchファイル経由で実行することもできます。
-
+talker.pyを起動後、別の端末でlistener.pyを起動すると現在時刻が表示されます。また、launchファイル経由でも実行できます。
 
 ```shell
 $ ros2 run mypkg talker
 
 
-$ ros2 service call /query person_msgs/srv/Query "time: now"
-waiting for service to become available...
-requester: making request: person_msgs.srv.Query_Request(time='now')
-
-response:
-person_msgs.srv.Query_Response(now='2025-12-27 23:33:35')
-
-$ ros2 service call /query person_msgs/srv/Query "time: y"
-waiting for service to become available...
-requester: making request: person_msgs.srv.Query_Request(time='y')
-
-response:
-person_msgs.srv.Query_Response(now='unknown')
+$ ros2 run mypkg listener
+[INFO] [1767875435.780543814] [listener]: now:2026-01-08 21:30:35
 
 
 $ ros2 launch mypkg talk_listen.launch.py
-[INFO] [launch]: All log files can be found below /home/nbalu/.ros/log/2025-12-27-23-59-25-473375-itto-1747
+[INFO] [launch]: All log files can be found below /home/nbalu/.ros/log/2026-01-08-21-36-00-421674-itto-1900
 [INFO] [launch]: Default logging verbosity is set to INFO
-[INFO] [talker-1]: process started with pid [1750]
-[INFO] [listener-2]: process started with pid [1751]
-[listener-2] [INFO] [1766847566.030323328] [listener]: now:2025-12-27 23:59:26
-[INFO] [listener-2]: process has finished cleanly [pid 1751]
+[INFO] [talker-1]: process started with pid [1903]
+[INFO] [listener-2]: process started with pid [1904]
+[listener-2] [INFO] [1767875761.409793603] [listener]: now:2026-01-08 21:36:01
+[INFO] [listener-2]: process has finished cleanly [pid 1904]
 ```
 
 ## ライセンス
