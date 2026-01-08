@@ -11,7 +11,6 @@ class Talker(Node):
     def __init__(self):
         super().__init__('talker')
         self.create_service(Trigger, 'query', self.cb)
-        self.get_logger().info('service /query ready')
 
     def cb(self, request, response):
         response.success = True
