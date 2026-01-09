@@ -53,12 +53,14 @@ talker.pyを起動後、別の端末でlistener.pyを起動すると現在時刻
 
 ```shell
 $ ros2 run mypkg talker
-
-
+```
+別端末で
+```shell
 $ ros2 run mypkg listener
 [INFO] [1767875435.780543814] [listener]: now:2026-01-08 21:30:35
-
-
+```
+launchファイル経由の場合は1つ目の端末で
+```shell
 $ ros2 launch mypkg talk_listen.launch.py
 [INFO] [launch]: All log files can be found below /home/nbalu/.ros/log/2026-01-08-21-36-00-421674-itto-1900
 [INFO] [launch]: Default logging verbosity is set to INFO
