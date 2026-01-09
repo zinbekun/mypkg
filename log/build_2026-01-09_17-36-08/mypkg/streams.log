@@ -1,0 +1,37 @@
+[0.727s] Invoking command in '/home/nbalu/ros2_ws/src/mypkg': PYTHONPATH=/home/nbalu/ros2_ws/src/mypkg/build/mypkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mypkg build --build-base /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build install --record /home/nbalu/ros2_ws/src/mypkg/build/mypkg/install.log --single-version-externally-managed install_data
+[0.959s] running egg_info
+[0.959s] creating build/mypkg/mypkg.egg-info
+[0.972s] writing build/mypkg/mypkg.egg-info/PKG-INFO
+[0.972s] writing dependency_links to build/mypkg/mypkg.egg-info/dependency_links.txt
+[0.973s] writing requirements to build/mypkg/mypkg.egg-info/requires.txt
+[0.973s] writing top-level names to build/mypkg/mypkg.egg-info/top_level.txt
+[0.973s] writing manifest file 'build/mypkg/mypkg.egg-info/SOURCES.txt'
+[0.999s] reading manifest file 'build/mypkg/mypkg.egg-info/SOURCES.txt'
+[1.000s] adding license file 'LICENSE'
+[1.000s] writing manifest file 'build/mypkg/mypkg.egg-info/SOURCES.txt'
+[1.001s] running build
+[1.001s] running build_py
+[1.001s] creating /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build
+[1.002s] creating /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build/lib
+[1.002s] creating /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build/lib/mypkg
+[1.002s] copying mypkg/__init__.py -> /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build/lib/mypkg
+[1.002s] running install
+[1.008s] running install_lib
+[1.020s] creating /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages/mypkg
+[1.021s] copying /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build/lib/mypkg/__init__.py -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages/mypkg
+[1.021s] byte-compiling /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages/mypkg/__init__.py to __init__.cpython-312.pyc
+[1.022s] running install_data
+[1.022s] creating /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/ament_index
+[1.022s] creating /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/ament_index/resource_index
+[1.023s] creating /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/ament_index/resource_index/packages
+[1.023s] copying resource/mypkg -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/ament_index/resource_index/packages
+[1.023s] copying package.xml -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/mypkg
+[1.023s] copying launch/talk_listen.launch.py -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/share/mypkg
+[1.023s] creating /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/mypkg
+[1.023s] copying mypkg/talker -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/mypkg
+[1.023s] copying mypkg/listener -> /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/mypkg
+[1.024s] running install_egg_info
+[1.038s] Copying build/mypkg/mypkg.egg-info to /home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages/mypkg-0.0.0-py3.12.egg-info
+[1.038s] running install_scripts
+[1.140s] writing list of installed files to '/home/nbalu/ros2_ws/src/mypkg/build/mypkg/install.log'
+[1.172s] Invoked command in '/home/nbalu/ros2_ws/src/mypkg' returned '0': PYTHONPATH=/home/nbalu/ros2_ws/src/mypkg/build/mypkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nbalu/ros2_ws/src/mypkg/install/mypkg/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mypkg build --build-base /home/nbalu/ros2_ws/src/mypkg/build/mypkg/build install --record /home/nbalu/ros2_ws/src/mypkg/build/mypkg/install.log --single-version-externally-managed install_data

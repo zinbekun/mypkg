@@ -3,24 +3,28 @@
 
 [![Test](https://github.com/zinbekun/mypkg/actions/workflows/test.yml/badge.svg)](https://github.com/zinbekun/mypkg/actions/workflows/test.yml)
 
-[README](https://github.com/zinbekun/mypkg/blob/main/README.md?plain=1#L2)は[akajaika](https://github.com/akajaika/robosys2024/blob/main/README.md?plain=1)（© 2024 Kai Nonaka）を参考に作られています。
+[README](https://github.com/zinbekun/mypkg/blob/main/README.md?plain=1#L2)は[akajaika](https://github.com/akajaika/mypkg/blob/main/README.md?plain=1)（© 2024 Kai Nonaka）を参考に作られています。
+
+
+## mypkg 機能説明
+本パッケージはROS2のサービス通信を用いて、現在時刻を返すだけのシンプルなサーバーノードを提供するパッケージです。
 
 ## テスト済みの環境
 ・Ubuntu22.04
 
 ・Python: 3.12
 
-## mypkg 機能説明
-本パッケージはROS2のサービス通信を用いて、現在時刻を返すだけのシンプルなサーバーノードを提供するパッケージです。
 
-## talker.pyノード
+## talkerノード
 役割：サービス要求を受信し、現在時刻を返します。
 
 使用するサービス：person_msgs/srv/Query
 
 サービス名：query 
 
-## listener.pyノード
+---
+
+## listenerノード
 役割：サービスサーバに要求を送り、応答を受信・表示する
 
 使用するサービス：person_msgs/srv/Query
@@ -30,7 +34,7 @@
 ## queryサービス
 このサービスは、クライアントから送信されたリクエストを受け取り、ノード内部で処理を行った結果をレスポンスとして返すサービスです。
 
-## talker.py ・listener.py 使い方
+## talker ・listener 使い方
 talker.pyを起動後、別の端末でlistener.pyを起動すると現在時刻が表示されます。また、launchファイル経由でも実行できます。
 
 ```shell
